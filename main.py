@@ -8,11 +8,14 @@ import random
 import time
 
 termsize = get_terminal_size()[0]
+def printcenter(text):
+    print(f'''{text : ^{termsize}}''')
+
 bars = '-'*(termsize//2-2)
-print(f'''{bars : ^{termsize}}''')
-print(f'''{'Discord Account Creator' : ^{termsize}}\n''')
-print(f'''{'Made by Music_Dude#0001' : ^{termsize}}''')
-print(f'''{bars : ^{termsize}}\n\n''')
+printcenter(bars)
+printcenter('Discord Account Creator\n')
+printcenter('Made by Music_Dude#0001')
+printcenter(bars + '\n\n')
 time.sleep(1)
 
 driver = uc.Chrome()
@@ -36,9 +39,9 @@ def logout(driver: uc.Chrome):
     driver.delete_all_cookies()
 
 EMAIL = input('Enter your GMAIL address: ').split('@')[0].replace('.', '')
-print(f'That email address will be able to create {2**len(EMAIL)//2} accounts.')
+print(f'    That email address will be able to create {2**len(EMAIL)//2} accounts.')
 NUMACCOUNTS = int(
-    input('What is the maximum number of accounts you would like to generate: '))
+    input('    What is the maximum number of accounts you would like to generate: '))
 emails = get_emails(EMAIL)
 
 startTime = time.time()/60
