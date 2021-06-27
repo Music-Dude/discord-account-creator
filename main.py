@@ -16,7 +16,6 @@ printcenter(bars)
 printcenter('Discord Account Creator\n')
 printcenter('Made by Music_Dude#0001')
 printcenter(bars + '\n\n')
-time.sleep(1)
 
 driver = uc.Chrome()
 pwchars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -38,7 +37,7 @@ def logout(driver: uc.Chrome):
     driver.execute_script('setInterval(()=>{document.body.appendChild(document.createElement`iframe`).contentWindow.localStorage.token=null},50),setTimeout(()=>{location.reload()},2500);')
     driver.delete_all_cookies()
 
-EMAIL = input('Enter your GMAIL address: ').split('@')[0].replace('.', '')
+EMAIL = input('    Enter your GMAIL address: ').split('@')[0].replace('.', '')
 print(f'    That email address will be able to create {2**len(EMAIL)//2} accounts.')
 NUMACCOUNTS = int(
     input('    What is the maximum number of accounts you would like to generate: '))
@@ -47,7 +46,7 @@ emails = get_emails(EMAIL)
 startTime = time.time()/60
 with driver:
     for i in range(1, NUMACCOUNTS+1):
-        print(f'Creating account #{i}...')
+        printcenter(f'Creating account #{i}...')
 
         email = next(emails) + '@gmail.com'
         password = ''.join(random.choices(pwchars, k=8))
@@ -77,7 +76,7 @@ with driver:
         try:
             WebDriverWait(driver, 20).until(
                 EC.presence_of_element_located((By.TAG_NAME, 'iframe')))
-            input('Is there a captcha? Press enter once you\'ve completed it.')
+            input('    Is there a captcha? Press enter once you\'ve completed it.')
         except TimeoutException:
             pass
 
@@ -87,7 +86,7 @@ with driver:
 
             token = driver.execute_script(
                 'location.reload();var i=document.createElement("iframe");document.body.appendChild(i);return i.contentWindow.localStorage.token').strip('"')
-            print(f'Successully created account! Token: {token}\n')
+            printcenter(f'Successully created account! Token: {token}\n')
 
             with open('accounts.txt', 'a+') as file:
                 file.write(f'{email}:{password}:{token}\n')
@@ -96,5 +95,5 @@ with driver:
         finally:
             logout(driver)
 
-input(f'Results:\nCreated {NUMACCOUNTS} accounts in {time.time()/60-startTime} minutes.\nCredentials are stored in the file \'accounts.txt\'.\n\nPress enter to exit.')
+input(f'    Results:\n    Created {NUMACCOUNTS} accounts in {time.time()/60-startTime} minutes.\n    Credentials are stored in the file \'accounts.txt\'.\n\n    Press enter to exit.')
 driver.quit()
