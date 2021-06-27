@@ -15,6 +15,7 @@ bars = '-'*(termsize//2-2)
 printcenter(bars)
 printcenter('Discord Account Creator\n')
 printcenter('Made by Music_Dude#0001')
+printcenter('https://github.com/Music-Dude')
 printcenter(bars + '\n\n')
 
 driver = uc.Chrome()
