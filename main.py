@@ -3,8 +3,17 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 import undetected_chromedriver.v2 as uc
+from os import get_terminal_size
 import random
 import time
+
+termsize = get_terminal_size()[0]
+bars = '-'*(termsize//2-2)
+print(f'''{bars : ^{termsize}}''')
+print(f'''{'Discord Account Creator' : ^{termsize}}\n''')
+print(f'''{'Made by Music_Dude#0001' : ^{termsize}}''')
+print(f'''{bars : ^{termsize}}\n\n''')
+time.sleep(1)
 
 driver = uc.Chrome()
 pwchars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
