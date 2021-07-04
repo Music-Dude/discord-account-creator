@@ -6,13 +6,14 @@ Python script to automatically create Discord accounts.
 - Automatically fetch account tokens
 - Log emails, passwords, and tokens in a file
 
-### Requirements (pip install):
+### Requirements (`pip install`):
 - undetected-chromedriver
 - selenium
 
 ### Notes:
 - Use a long enough email address for the trick to work properly
 - You should use a VPN to avoid getting your IP marked suspicious
+- Using a VPN or making too many accounts may get new accounts locked out
 - Don't forget to press enter after completing a captcha
 
 ##### Do note that I am NOT responsible for any activities you decide to use this for, nor anything that happens to you as a result.

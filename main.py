@@ -3,23 +3,36 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 import undetected_chromedriver.v2 as uc
-from os import get_terminal_size
 import random
 import time
+import os
 
-termsize = get_terminal_size()[0]
-def printcenter(text):
-    print(f'''{text : ^{termsize}}''')
+termsize = os.get_terminal_size()[0]
+left = ' '*int(termsize/4)
 
-bars = '-'*(termsize//2-2)
-printcenter(bars)
-printcenter('Discord Account Creator\n')
-printcenter('Made by Music_Dude#0001')
-printcenter('https://github.com/Music-Dude')
-printcenter(bars + '\n\n')
+
+def write(*args, **kwargs):
+    print(left, *args, **kwargs)
+
+
+def ask(prompt):
+    write(prompt, end='')
+    return input()
+
+
+def intro(text):
+    text = text.split('\n')
+    for t in text:
+        print(f'{t : ^{termsize}}')
+
+
+os.system('cls' if os.name == 'nt' else 'clear')
+bars = '-'*(termsize//2)
+intro(bars + '\nDiscord Account Creator\n\nMade by Music_Dude#0001\nhttps://github.com/Music-Dude\n' + bars + '\n\n')
 
 driver = uc.Chrome()
 pwchars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+
 
 def get_emails(username):
     if len(username) < 2:
@@ -35,19 +48,23 @@ def get_emails(username):
 
 def logout(driver: uc.Chrome):
     """Log out of Discord to create another account"""
-    driver.execute_script('setInterval(()=>{document.body.appendChild(document.createElement`iframe`).contentWindow.localStorage.token=null},50),setTimeout(()=>{location.reload()},2500);')
+    driver.execute_script(
+        'setInterval(()=>{document.body.appendChild(document.createElement`iframe`).contentWindow.localStorage.token=null},50),setTimeout(()=>{location.reload()},0);')
+    time.sleep(2)
     driver.delete_all_cookies()
 
-EMAIL = input('    Enter your GMAIL address: ').split('@')[0].replace('.', '')
-print(f'    That email address will be able to create {2**len(EMAIL)//2} accounts.')
-NUMACCOUNTS = int(
-    input('    What is the maximum number of accounts you would like to generate: '))
-emails = get_emails(EMAIL)
+
+email = ask('Enter your GMAIL address: ').split('@')[0].replace('.', '')
+write(
+    f'That email address will be able to create {2**len(email)//2} accounts.')
+numaccounts = int(
+    ask('What is the maximum number of accounts you would like to generate: '))
+emails = get_emails(email)
 
 startTime = time.time()/60
 with driver:
-    for i in range(1, NUMACCOUNTS+1):
-        printcenter(f'Creating account #{i}...')
+    for i in range(1, numaccounts+1):
+        write(f'\nCreating account #{i}...')
 
         email = next(emails) + '@gmail.com'
         password = ''.join(random.choices(pwchars, k=8))
@@ -57,7 +74,7 @@ with driver:
         year = str(random.randint(1980, 2003))
 
         driver.get('https://discord.com/register')
-        print(f'Using credentials {email}:{password}')
+        write(f'Using credentials {email}:{password}')
 
         elems = driver.find_elements_by_tag_name('input')
         keys = (email, password, password, month+'\ue004', day, year)
@@ -77,7 +94,7 @@ with driver:
         try:
             WebDriverWait(driver, 20).until(
                 EC.presence_of_element_located((By.TAG_NAME, 'iframe')))
-            input('    Is there a captcha? Press enter once you\'ve completed it.')
+            ask('Is there a captcha? Press enter once you\'ve completed it.')
         except TimeoutException:
             pass
 
@@ -87,14 +104,19 @@ with driver:
 
             token = driver.execute_script(
                 'location.reload();var i=document.createElement("iframe");document.body.appendChild(i);return i.contentWindow.localStorage.token').strip('"')
-            printcenter(f'Successully created account! Token: {token}\n')
+            write(f'Successully created account! Token: {token}\n')
 
             with open('accounts.txt', 'a+') as file:
                 file.write(f'{email}:{password}:{token}\n')
-        except:
+        except TimeoutException:
             pass
         finally:
             logout(driver)
 
-input(f'    Results:\n    Created {NUMACCOUNTS} accounts in {time.time()/60-startTime} minutes.\n    Credentials are stored in the file \'accounts.txt\'.\n\n    Press enter to exit.')
+write('Results:')
+write(
+    f'Created {numaccounts} accounts in {time.time()/60-startTime:0.2F} minutes.')
+write('Credentials are stored in the file \'accounts.txt\'.')
+ask('Press enter to exit.')
+
 driver.quit()
