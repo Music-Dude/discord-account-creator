@@ -105,10 +105,25 @@ with driver:
 
             token = driver.execute_script(
                 'location.reload();var i=document.createElement("iframe");document.body.appendChild(i);return i.contentWindow.localStorage.token').strip('"')
-            write(f'Successully created account! Token: {token}\n')
+            use = True
 
-            with open('accounts.txt', 'a+') as file:
-                file.write(f'{email}:{password}:{token}\n')
+            try:
+                driver.find_element_by_text('Log Out').click()
+                keep = ask(
+                    f'The account [{token}] was locked out. Would you like to keep it?')
+
+                if 'y' in keep.lower():
+                    write('Okay, writing to file. . .')
+                else:
+                    write('Okay, this account won\'t be saved')
+                    use = False
+            except AttributeError:
+                pass
+
+            if use:
+                write(f'Successully created account! Token: {token}\n')
+                with open('accounts.txt', 'a+') as file:
+                    file.write(f'{email}:{password}:{token}\n')
         except TimeoutException:
             pass
         finally:
