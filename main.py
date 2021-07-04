@@ -64,7 +64,8 @@ emails = get_emails(email)
 startTime = time.time()/60
 with driver:
     for i in range(1, numaccounts+1):
-        write(f'\nCreating account #{i}...')
+        print('\n')
+        write(f'Creating account #{i}...')
 
         email = next(emails) + '@gmail.com'
         password = ''.join(random.choices(pwchars, k=8))
