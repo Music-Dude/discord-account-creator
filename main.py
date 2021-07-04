@@ -92,6 +92,11 @@ with driver:
 
         driver.find_elements_by_tag_name('button')[0].click()
 
+        while driver.find_element_by_text('You are being rate limited.'):
+            ask(
+                'You are being rate limited. Press enter when you\'d like to continue. . .')
+            driver.find_elements_by_tag_name('button')[0].click()
+
         try:
             WebDriverWait(driver, 20).until(
                 EC.presence_of_element_located((By.TAG_NAME, 'iframe')))
@@ -110,7 +115,7 @@ with driver:
             try:
                 driver.find_element_by_text('Log Out').click()
                 keep = ask(
-                    f'The account [{token}] was locked out. Would you like to keep it?')
+                    f'The account [{token}] was locked out. Would you like to keep it? [Y/N] ')
 
                 if 'y' in keep.lower():
                     write('Okay, writing to file. . .')
